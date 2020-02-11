@@ -1,0 +1,5 @@
+#name: Taeha
+#ID number: 950309-1234567
+#phone number: 010-8011-4229
+#favorite food: chicken
+#hobby: basketball
