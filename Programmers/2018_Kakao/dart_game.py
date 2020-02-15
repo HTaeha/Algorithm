@@ -8,16 +8,21 @@ def solution(dartResult):
     for i, data in enumerate(dartResult):
         if data == 'S':
             pass
+        # double, ^2.
         elif data == 'D':
             score[score_idx] = pow(score[score_idx], 2)
+        # triple, ^3.
         elif data == 'T':
             score[score_idx] = pow(score[score_idx], 3)
+        # *2, previous score and currently score.
         elif data == '*':
             score[score_idx] *= 2
             if score_idx != 0:
                 score[score_idx-1] *= 2
+        # *-1, make current score minus.
         elif data == '#':
             score[score_idx] *= -1
+        # score number.
         else:
             if i != 0:
                 # score 10

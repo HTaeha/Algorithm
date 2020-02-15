@@ -3,9 +3,11 @@ def solution(cacheSize, cities):
     answer = 0
     queue = []
 
+    # If cacheSize is 0, all cache miss.
     if cacheSize == 0:
         return len(cities)*5
 
+    # lowercase.
     for i, data in enumerate(cities):
         cities[i] = data.lower()
 
@@ -13,25 +15,30 @@ def solution(cacheSize, cities):
         flag = False
         if len(queue) < cacheSize:
             for i_q, d_q in enumerate(queue):
+                # cache hit.
                 if d_q == data:
                     answer += 1
                     queue.pop(i_q)
                     queue.append(data)
                     flag = True
                     break
+            # cache miss.
             if not flag:
                 answer += 5
                 queue.append(data)
         else:
             for i_q, d_q in enumerate(queue):
+                # cache hit.
                 if d_q == data:
                     answer += 1
                     queue.pop(i_q)
                     queue.append(data)
                     flag = True
                     break
+            # cache miss.
             if not flag:
                 answer += 5
+                # LRU. 0 index is least recently used item.
                 queue.pop(0)
                 queue.append(data)
                 
