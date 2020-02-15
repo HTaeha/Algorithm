@@ -1,3 +1,5 @@
+# 2018 KAKAO BLIND RECRUITMENT
+# https://programmers.co.kr/learn/courses/30/lessons/17682
 # 28min 4sec
 def solution(dartResult):
     answer = 0

@@ -1,3 +1,5 @@
+# 2018 KAKAO BLIND RECRUITMENT
+# https://programmers.co.kr/learn/courses/30/lessons/17677
 def solution(str1, str2):
     answer = 0
 
@@ -7,24 +9,31 @@ def solution(str1, str2):
     if len(s1) == 0 and len(s2) == 0:
         return 65536
 
+    # eliminate duplicated data.
     set_s1 = set(s1)
     set_s2 = set(s2)
+    # intersection of set_s1 and set_s2.
     inter = set_s1.intersection(set_s2)
+    # union of set_s1 and set_s2.
     union = set_s1.union(set_s2)
     diff = union-inter
 
     set_s1.clear()
     set_s2.clear()
 
+    # key : 2 words string
+    # val : the number of its key.
+    # ex) s = ['fr', 'ra', 'fr', 'ce']
+    #     dict_s = ['fr' : 2, 'ra' : 1, 'ce' : 1]
     dict_s1 = dict()
     dict_s2 = dict()
 
+    # make dictionary.
     for i, data in enumerate(s1):
         if data in dict_s1:
             dict_s1[data] += 1
         else:
             dict_s1[data] = 1
-
     for i, data in enumerate(s2):
         if data in dict_s2:
             dict_s2[data] += 1

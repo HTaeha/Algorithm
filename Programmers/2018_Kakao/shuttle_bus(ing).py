@@ -1,3 +1,5 @@
+# 2018 KAKAO BLIND RECRUITMENT
+# https://programmers.co.kr/learn/courses/30/lessons/17678
 # 1hour 12min 10sec pause.
 def solution(n, t, m, timetable):
     answer = ''

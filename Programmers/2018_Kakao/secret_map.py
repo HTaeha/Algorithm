@@ -1,3 +1,5 @@
+# 2018 KAKAO BLIND RECRUITMENT
+# https://programmers.co.kr/learn/courses/30/lessons/17681
 # 10min 56sec
 def solution(n, arr1, arr2):
     answer = []
