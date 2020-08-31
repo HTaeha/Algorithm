@@ -1,3 +1,7 @@
+# 2020 KAKAO BLIND REQRUITMENT
+# 가사 검색
+# https://programmers.co.kr/learn/courses/30/lessons/60060
+
 # Trie에 들어가는 node class.
 class Node(object):
     def __init__(self, data, depth):
