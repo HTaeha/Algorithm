@@ -1,3 +1,7 @@
+# 2020 KAKAO BLIND REQRUITMENT
+# 기둥과 보 설치
+# https://programmers.co.kr/learn/courses/30/lessons/60061
+
 import copy
 
 # item과 frame이 제거 됐을 때 item을 설치 할 수 있는지 check함.
