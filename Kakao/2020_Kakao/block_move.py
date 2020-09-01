@@ -1,3 +1,7 @@
+# 2020 KAKAO BLIND REQRUITMENT
+# 블록 이동하기
+# https://programmers.co.kr/learn/courses/30/lessons/60063
+
 import queue
 class block:
     def __init__(self, board):

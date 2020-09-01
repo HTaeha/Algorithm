@@ -1,3 +1,6 @@
+# 실패율
+# https://programmers.co.kr/learn/courses/30/lessons/42889
+
 def solution(N, stages):
     answer = [0 for i in range(N)]
     # The number of people.
