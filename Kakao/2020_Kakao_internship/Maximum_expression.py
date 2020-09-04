@@ -1,101 +1,95 @@
-# 수식 최대화
-# https://programmers.co.kr/learn/courses/30/lessons/67257
-
-import re
-import copy
-
-# 0 이상 integer만 가능.
-# -, +, * 만 고려돼있음.
-# expression : string 
-#               ex) "(100-200)*300-500+20"
-# order : dictionary
-#         ex) {'+' = 1, '*' = 2, '-' = 1}
-def infix_to_postfix(expression, order):
-    result = []
-    # operand 저장.
-    stack = []
-    # 숫자 character를 모아서 하나의 integer로 만듦.
-    temp = ""
-    for data in expression:
-        if data in ['-', '+', '*']:
-            if temp != "":
-                result.append(int(temp))
-                temp = ""
-
-            while True:
-                if len(stack) == 0:
-                    stack.append(data)
-                    break
-                top = stack.pop()
-                if order[top] >= order[data]:
-                    result.append(top)
-                else:
-                    stack.append(top)
-                    stack.append(data)
-                    break
-        else:
-            temp += data
-
-    result.append(int(temp))
-
-    result = result + stack[::-1] 
-
-    return result
-
-def eval(postfix):
-    result = 0
-    stack = []
-
-    for data in postfix:
-        if data in ['-', '+', '*']:
-            num2 = stack.pop()
-            num1 = stack.pop()
-
-            if data == '-':
-                stack.append(num1-num2)
-            elif data == '+':
-                stack.append(num1+num2)
-            elif data == '*':
-                stack.append(num1*num2)
-        else:
-            stack.append(data)
-
-    return stack.pop()
-
-def permutation(l, n):
-    result = []
-    if n > len(l):
-        return result
-
-    if n == 1:
-        for data in l:
-            result.append([data])
-    elif n > 1:
-        for i in range(len(l)):
-            temp = copy.deepcopy(l)
-            temp.remove(l[i])
-            for p in permutation(temp, n-1):
-                result.append([l[i]] + p)
-
-    return result
+from copy import deepcopy
+from itertools import permutations
 
 def solution(expression):
     answer = 0
+    result = []
 
-    order = dict()
+    ope_dict = dict()
+    temp_num = ''
+    s_expression = []
+    for i, exp in enumerate(expression):
+        if exp in ['-', '+', '*']:
+            s_expression.append(temp_num)
+            s_expression.append(exp)
+            temp_num = ''
+            ope_dict[exp] = 0
+        else:
+            temp_num += exp
+    s_expression.append(temp_num)
+    print(s_expression)
 
-    perm = permutation([1,2,3], 3)
-    print(perm)
+    l = len(ope_dict)
+    if l == 1:
+        for k, v in ope_dict.items():
+            ope_dict[k] = 1
+        post_order_exp = make_post_order(s_expression, ope_dict)
+        result.append(abs(calc(post_order_exp)))
+    elif l == 2:
+        for p in list(permutations([1,2], 2)):
+            i = 0
+            for k, v in ope_dict.items():
+                ope_dict[k] = p[i]
+                i += 1
+            post_order_exp = make_post_order(s_expression, ope_dict)
+            result.append(abs(calc(post_order_exp))) 
+    elif l == 3:
+        for p in list(permutations([1,2,3], 3)):
+            i = 0
+            for k, v in ope_dict.items():
+                ope_dict[k] = p[i]
+                i += 1
+            post_order_exp = make_post_order(s_expression, ope_dict)
+            result.append(abs(calc(post_order_exp)))   
 
-    for p in perm:
-        order['-'] = p[0]
-        order['+'] = p[1]
-        order['*'] = p[2]
+    answer = max(result)
 
-        postfix_exp = infix_to_postfix(expression, order)
-        answer = max(abs(eval(postfix_exp)), answer)
-
+    print(result)
     return answer
+
+def make_post_order(s_expression, ope_dict):
+    s = []
+    q = []
+    
+    print(ope_dict)
+    temp_exp = deepcopy(s_expression)
+    while len(temp_exp):
+        if temp_exp[0] not in ope_dict:
+            q.append(temp_exp.pop(0))
+        else:
+            #if len(s) != 0 and ope_dict[s[-1]] >= ope_dict[temp_exp[0]]:
+            while True:
+                if len(s) != 0 and ope_dict[s[-1]] >= ope_dict[temp_exp[0]]:
+                    q.append(s.pop())
+                else:
+                    break
+            s.append(temp_exp.pop(0))
+
+    while len(s):
+        q.append(s.pop())
+
+    return q
+
+def calc(post_order_exp):
+    s = []
+    print(post_order_exp)
+
+    for exp in post_order_exp:
+        if exp not in ['-', '+', '*']:
+            s.append(exp)
+        else:
+            n2 = s.pop()
+            n1 = s.pop()
+            if exp == '-':
+                n = int(n1) - int(n2)
+            elif exp == '+':
+                n = int(n1) + int(n2)
+            elif exp == '*':
+                n = int(n1) * int(n2)
+            s.append(n)
+
+    print(s)
+    return s[0]
 
 if __name__ == "__main__":
     expression = "100-200*300-500+20"
