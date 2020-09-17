@@ -1,28 +1,17 @@
 from copy import deepcopy
 from collections import deque
 
+arr = []
 class Point(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-class Marble_game(object):
-    def __init__(self, R, B, arr, count, result):
-        self.arr = arr
-        self.R = R
-        self.B = B
-        self.count = count
-        self.result = result
-
 # direction : [-1, 0] - up
 #             [0, 1] - right
 #             [1, 0] - down
 #             [0, -1] - left
-def move(R, B, arr, direction):
-    new_arr = deepcopy(arr)
-    new_arr[R.x] = new_arr[R.x].replace('R', '.')
-    new_arr[B.x] = new_arr[B.x].replace('B', '.')
-
+def move(R, B, direction):
     R = deepcopy(R)
     B = deepcopy(B)
     first_R = [R.x, R.y]
@@ -43,8 +32,7 @@ def move(R, B, arr, direction):
     while True:
         R_next_x = R_current_x + direction[0]
         R_next_y = R_current_y + direction[1]
-    #    print(R_next_x, R_next_y)
-        next_item = new_arr[R_next_x][R_next_y]
+        next_item = arr[R_next_x][R_next_y]
 
         if next_item == '#':
             R.x = R_current_x
@@ -65,7 +53,7 @@ def move(R, B, arr, direction):
     while True:
         B_next_x = B_current_x + direction[0]
         B_next_y = B_current_y + direction[1]
-        next_item = new_arr[B_next_x][B_next_y]
+        next_item = arr[B_next_x][B_next_y]
 
         if next_item == '#':
             B.x = B_current_x
@@ -104,13 +92,9 @@ def move(R, B, arr, direction):
             if first_B[0] == B.x and first_B[1] == B.y:
                 result = 0
 
-    new_arr[R.x] = new_arr[R.x][:R.y] + 'R' + new_arr[R.x][R.y+1:]
-    new_arr[B.x] = new_arr[B.x][:B.y] + 'B' + new_arr[B.x][B.y+1:]
-
-    return [new_arr, R, B, result]
-
+    return [R, B, result]
             
-def bfs(arr, R, B):
+def bfs(R, B):
     q = deque()
 
     arr[R.x] = arr[R.x].replace('R', '.')
@@ -120,34 +104,34 @@ def bfs(arr, R, B):
     # result - 0 : blue goal
     #          1 : blue not goal, red goal
     #          2 : red, blue goal
-    q.append([arr, R, B, 2, 0])
-    while True:
+    q.append([R, B, 2, 0])
+    while len(q):
         temp = q.popleft()
-        #'''
+        '''
         print()
-        for i in range(5):
-            if i in [1, 2]:
+        for i in range(4):
+            if i in [1, 0]:
                 print(temp[i].x, temp[i].y)
-            elif i == 0:
-                for j in range(len(temp[i])):
-                    print(temp[i][j])
             else:
                 print(temp[i])
-        #'''
-        if temp[4] == 10:
+        '''
+
+        if temp[3] == 11:
             return -1
 
-        if temp[3] == 0:
+        if temp[2] == 0:
             continue
-        elif temp[3] == 1:
-            return temp[4]
+        elif temp[2] == 1:
+            return temp[3]
         else:
-            q.append(move(temp[1], temp[2], temp[0], [1, 0])+[temp[4]+1])
-            q.append(move(temp[1], temp[2], temp[0], [-1, 0])+[temp[4]+1])
-            q.append(move(temp[1], temp[2], temp[0], [0, 1])+[temp[4]+1])
-            q.append(move(temp[1], temp[2], temp[0], [0, -1])+[temp[4]+1])
+            q.append(move(temp[0], temp[1], [1, 0])+[temp[3]+1])
+            q.append(move(temp[0], temp[1], [-1, 0])+[temp[3]+1])
+            q.append(move(temp[0], temp[1], [0, 1])+[temp[3]+1])
+            q.append(move(temp[0], temp[1], [0, -1])+[temp[3]+1])
 
-def find(arr, what):
+    return -1
+
+def find(what):
     for i in range(len(arr)):
         if what in arr[i]:
             j = arr[i].index(what)
@@ -156,11 +140,10 @@ def find(arr, what):
 if __name__ == "__main__":
     n, m = map(int, input().split())
 
-    arr = []
     for i in range(n):
         arr.append(input())
 
-    result = bfs(arr, find(arr, 'R'), find(arr, 'B'))
+    result = bfs(find('R'), find('B'))
 
     print(result)
 
