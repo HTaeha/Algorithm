@@ -8,6 +8,7 @@ def check(value):
     else:
         return False
 
+# country 끼리 체크하면서 합쳐지면 다 안 돌고 흡수하도록 바꾸기.
 def bfs(start, visited):
     global N, Map
 
@@ -62,21 +63,27 @@ if __name__ == "__main__":
     N, L, R = map(int, input().split())
 
     Map = []
-    for _ in range(N):
+    country = []
+    for i in range(N):
         temp = list(map(int, input().split()))
+        for j in range(N):
+            country.append([temp[j], [i, j]])
         Map.append(temp)
 
     count = 0
     while True:
-        country = []
+        #country = []
         visited = []
         flag = False
         for i in range(N):
             for j in range(N):
-                [val, temp] = bfs([i, j], visited)
-                if len(temp) > 1:
-                    flag = True
-                    country.append([val, temp])
+                if j != N-1 and Map[i][j] == Map[i][j+1]:
+                    continue
+                if [i, j] not in visited:
+                    [val, temp] = bfs([i, j], visited)
+                    if len(temp) > 1:
+                        flag = True
+                        country.append([val, temp])
         
         if not flag:
             break
