@@ -1,3 +1,4 @@
+import random
 
 class Node(object):
     def __init__(self, value):
@@ -56,47 +57,46 @@ class BST(object):
 
             if node.value == num:
                 if node.left is None and node.right is None:
-                    if node.parent.value < node.value:
-                        new = None
-                        node.parent.right = new
-                    else:
-                        node.parent.left = new
+                    new = None
+                    if node.parent is not None:
+                        if node.parent.value < node.value:
+                            node.parent.right = new
+                        else:
+                            node.parent.left = new
                 elif node.left is None:
                     new = node.right
                     new.parent = node.parent
-                    if node.parent.value < node.value:
-                        node.parent.right = new
-                    else:
-                        node.parent.left = new
+                    if node.parent is not None:
+                        if node.parent.value < node.value:
+                            node.parent.right = new
+                        else:
+                            node.parent.left = new
                 elif node.right is None:
                     new = node.left
                     new.parent = node.parent
-                    if node.parent.value < node.value:
-                        node.parent.right = new
-                    else:
-                        node.parent.left = new
+                    if node.parent is not None:
+                        if node.parent.value < node.value:
+                            node.parent.right = new
+                        else:
+                            node.parent.left = new
                 else:
                     new = node.right
                     while True:
                         if new.left is None:
                             break
                         new = new.left
-                    if new.right is not None:
+                    if new.parent.value < new.value:
+                        new.parent.right = new.right
+                    else:
                         new.parent.left = new.right
+                    if new.right is not None:
                         new.right.parent = new.parent
 
-                    new.right = node.right
-                    new.left = node.left
-                    new.parent = node.parent
-                    if node.parent.value < node.value:
-                        node.parent.right = new
-                    else:
-                        node.parent.left = new
+                    node.value = new.value
+                    new = node
 
                 if num == self.root.value:
                     self.root = new
-
-                del node
 
                 return True
 
@@ -124,7 +124,7 @@ class BST(object):
             print(node.value)
 
 if __name__ == "__main__":
-    temp = [5, 4, 7, 2, 1, 9, 10]
+    temp = [5, 4, 7, 2, 1, 9, 10, 6]
     b = BST()
     for num in temp:
         b.insert(num)
@@ -135,9 +135,47 @@ if __name__ == "__main__":
     print()
     b.postorder(b.root)
     print()
-    print(b.search(12))
-    print(b.search(10))
-    b.delete(4)
+    print(b.delete(5))
+    print("root : ",b.root.value)
+    b.preorder(b.root)
+    print()
     b.inorder(b.root)
-    b.delete(5)
+    print()
+    b.postorder(b.root)
+    print()
+    print(b.delete(7))
+    print(b.delete(7))
+    print("root : ",b.root.value)
+    b.preorder(b.root)
+    print()
     b.inorder(b.root)
+    print()
+    b.postorder(b.root)
+    print()
+
+
+    # 1 ~ 1000 중, 100개의 숫자 랜덤 선택 
+    bst_nums = set()
+    while len(bst_nums) != 100:
+        bst_nums.add(random.randint(0, 999))
+
+    # 100개의 숫자 이진 탐색 트리에 입력, 임의로 루트노드는 500을 넣기로 함
+    binary_tree = BST()
+    for num in bst_nums:
+        binary_tree.insert(num)
+
+    # 입력한 100개의 숫자를 검색 (검색 기능 확인)
+    for num in bst_nums:
+        if binary_tree.search(num) == False:
+            print ('search failed', num)
+
+    # 입력한 100개의 숫자 중 10개의 숫자를 랜덤 선택
+    delete_nums = set()
+    bst_nums = list(bst_nums)
+    while len(delete_nums) != 10:
+        delete_nums.add(bst_nums[random.randint(0, 99)])
+
+    # 선택한 10개의 숫자를 삭제 (삭제 기능 확인)
+    for del_num in delete_nums:
+        if binary_tree.delete(del_num) == False:
+            print ('search failed', delete_nums, del_num)
