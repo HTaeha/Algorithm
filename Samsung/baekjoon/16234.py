@@ -1,5 +1,7 @@
 from collections import deque
 
+direction = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+
 def check(value):
     global L, R
     value = abs(value)
@@ -10,7 +12,7 @@ def check(value):
 
 # country 끼리 체크하면서 합쳐지면 다 안 돌고 흡수하도록 바꾸기.
 def bfs(start, visited):
-    global N, Map
+    global N, Map, direction
 
     if start in visited:
         return [0, []]
@@ -24,31 +26,16 @@ def bfs(start, visited):
         idx = q.popleft()
         [i, j] = idx
 
-        temp = [i-1, j]
-        if i-1 >= 0 and temp not in visited and check(Map[i][j]-Map[i-1][j]):
-            q.append(temp)
-            visited.append(temp)
-            result.append(temp)
-            _sum += Map[temp[0]][temp[1]]
-        temp = [i+1, j]
-        if i+1 < N and temp not in visited and check(Map[i][j]-Map[i+1][j]):
-            q.append(temp)
-            visited.append(temp)
-            result.append(temp)
-            _sum += Map[temp[0]][temp[1]]
-        temp = [i, j-1]
-        if j-1 >= 0 and temp not in visited and check(Map[i][j]-Map[i][j-1]):
-            q.append(temp)
-            visited.append(temp)
-            result.append(temp)
-            _sum += Map[temp[0]][temp[1]]
-        temp = [i, j+1]
-        if j+1 < N and temp not in visited and check(Map[i][j]-Map[i][j+1]):
-            q.append(temp)
-            visited.append(temp)
-            result.append(temp)
-            _sum += Map[temp[0]][temp[1]]
-        
+        for d in range(4):
+            x = i + direction[d]
+            y = j + direction[d]
+            temp = [x, y]
+            if x >= 0 and y < N and temp not in visited and check(Map[i][j]-Map[x][y]):
+                q.append(temp)
+                visited.append(temp)
+                result.append(temp)
+                _sum += Map[x][y]
+       
     return [_sum, result]
 
 def calculate(lst):
