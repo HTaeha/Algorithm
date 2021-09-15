@@ -1,26 +1,21 @@
 // 입실 퇴실
 // https://programmers.co.kr/learn/courses/30/lessons/86048?language=go
-// 틀린 풀이
 package main
 
 import "fmt"
 
 func solution(enter []int, leave []int) []int {
 	meets := make([][]int, len(enter)+1, len(enter)+1)
-	// meets := make([]map[int]bool, len(enter)+1, len(enter)+1)
-	// for i := range meets {
-	// 	meets[i] = map[int]bool{}
-	// }
 	result := make([]int, len(enter)+1, len(enter)+1)
 	room := []int{}
 
 	ei, li := 0, 0
 
 	for ei < len(enter) || li < len(leave) {
-		fmt.Println(meets, room, ei, li)
 		if !numberInSlice(leave[li], room) {
-			meets[enter[ei]] = room[:]
-			// meets[leave[li]] = setAdd(meets[leave[li]], enter[ei])
+			for _, b := range room {
+				meets[enter[ei]] = append(meets[enter[ei]], b)
+			}
 			room = append(room, enter[ei])
 			ei += 1
 		} else {
@@ -29,29 +24,14 @@ func solution(enter []int, leave []int) []int {
 		}
 	}
 
-	fmt.Println(meets)
-	fmt.Println()
-	temp := make([]map[int]bool, len(enter)+1, len(enter)+1)
-	for i := range temp {
-		temp[i] = map[int]bool{}
-	}
 	for i, a := range meets {
-		// temp[i] = a[:]
 		for _, v := range a {
-			setAdd(temp[i], v)
-			setAdd(temp[v], i)
-			// if !numberInSlice(i, temp[v]) {
-			// 	// result[v] += 1
-			// 	fmt.Println(i, v, temp)
-			// 	temp[3] = append(temp[3], 1)
-			// 	fmt.Println(i, v, temp)
-			// 	// meets[v] = append(meets[v], i)
-			// 	// fmt.Println(i, v, meets)
-			// }
+			if !numberInSlice(i, meets[v]) {
+				meets[v] = append(meets[v], i)
+			}
 		}
 	}
-	fmt.Println(temp)
-	for i, a := range temp {
+	for i, a := range meets {
 		result[i] = len(a)
 	}
 
@@ -84,11 +64,6 @@ func numberInSlice(a int, list []int) bool {
 	return false
 }
 
-func setAdd(s map[int]bool, v int) map[int]bool {
-	s[v] = true
-	return s
-}
-
 func main() {
 	// 1 ~ 1000 length
 	e := []int{1, 3, 2}
@@ -112,25 +87,4 @@ func main() {
 
 	meets := solution(e, l)
 	fmt.Println(meets)
-
-	test := make([][]int, 5, 5)
-	test[0] = []int{}
-	test[1] = []int{}
-	test[2] = []int{3}
-	test[3] = []int{}
-
-	fmt.Println(test)
-	for i, a := range test {
-		fmt.Println(i, a)
-		for _, v := range a {
-			if !numberInSlice(i, test[v]) && v != i {
-				fmt.Println(v, i, test)
-				test[v] = append(test[v], i)
-				fmt.Println(test)
-			}
-		}
-	}
-	// test[3] = append(test[3], 2)
-	fmt.Println(test)
-
 }
