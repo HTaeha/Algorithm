@@ -1,5 +1,6 @@
 // 입실 퇴실
 // https://programmers.co.kr/learn/courses/30/lessons/86048?language=go
+// 틀린 풀이
 package main
 
 import "fmt"
@@ -90,10 +91,10 @@ func setAdd(s map[int]bool, v int) map[int]bool {
 
 func main() {
 	// 1 ~ 1000 length
-	// e := []int{1, 3, 2}
-	// l := []int{1, 2, 3}
-	e := []int{1, 4, 2, 3}
-	l := []int{2, 1, 3, 4}
+	e := []int{1, 3, 2}
+	l := []int{1, 2, 3}
+	// e := []int{1, 4, 2, 3}
+	// l := []int{2, 1, 3, 4}
 	// e := []int{3, 2, 1}
 	// l := []int{2, 1, 3}
 	// e := []int{3, 2, 1}
@@ -118,18 +119,18 @@ func main() {
 	test[2] = []int{3}
 	test[3] = []int{}
 
-	// fmt.Println(test)
-	// for i, a := range test {
-	// 	fmt.Println(i, a)
-	// 	for _, v := range a {
-	// 		if !numberInSlice(i, test[v]) && v != i {
-	// 			fmt.Println(v, i, test)
-	// 			test[3] = append(test[3], i)
-	// 			fmt.Println(test)
-	// 		}
-	// 	}
-	// }
-	// // test[3] = append(test[3], 2)
-	// fmt.Println(test)
+	fmt.Println(test)
+	for i, a := range test {
+		fmt.Println(i, a)
+		for _, v := range a {
+			if !numberInSlice(i, test[v]) && v != i {
+				fmt.Println(v, i, test)
+				test[v] = append(test[v], i)
+				fmt.Println(test)
+			}
+		}
+	}
+	// test[3] = append(test[3], 2)
+	fmt.Println(test)
 
 }
